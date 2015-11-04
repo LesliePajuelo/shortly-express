@@ -96,33 +96,36 @@ function(req, res) {
 /************************************************************/
 // Write your authentication routes here
 /************************************************************/
-app.get('/create', util.isLogged, 
-  function(req, res) {
-  //if(isLogged){
-    //res.redirect('/create')}
-});
+// app.get('/create', util.isLogged, 
+//   function(req, res) {
+//   //if(isLogged){
+//     //res.redirect('/create')}
+// });
 
-app.get('/login', util.isLogged, 
+app.get('/login',  
   function(req, res){
-  //if(isLogged){
-  //res.render('/links')}
-})
+  res.render('login');
+});
 
 //ALICE
 //http://expressjs-book.com/index.html%3Fp=128.html
 //setting session variables
 //ADD BCRYPT TO RESOURCES
 //
-app.post('/login'),
+app.post('/login',
   function(req, res){
-    var username = req.body.username;
-    var password = req.body.password;
+    User.checkPassword(req, res);
+    util.createSession(req, function(){});
+   res.render('index');
+});
 
-    utils.createUser(req,res)
-    res.render('/')
-  }
+app.get('/signup', function(req, res) {
+  res.render('signup');
+});
 
-
+app.post('/signup', util.createUser, function(req, res) {
+  res.render('index');
+});
 
 /************************************************************/
 // Handle the wildcard route last - if all other routes fail
